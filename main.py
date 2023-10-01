@@ -65,17 +65,21 @@ def get_next_state_probabilities(initial_state: int, action: int, dynamics: dict
 def approximate_objective_returns(n_episodes: int, policy: dict, gamma: float) -> float:
     total_discounted_return = 0
     avg_discounted_returns = []
+    discounted_returns = []
 
     for i in range(n_episodes):
-        total_discounted_return += runEpisode(policy, gamma)
+        discounted_return = runEpisode(policy, gamma)
+        total_discounted_return += discounted_return
         avg_discounted_returns.append(total_discounted_return/(i+1))
-    return avg_discounted_returns
+        discounted_returns.append(discounted_return)
+    return [avg_discounted_returns, discounted_returns]
 
 # PROBLEM 2d)
 def policy_gen_eval(n_episodes: int, gamma: float):
     best_policy = None
     best_policy_performance = -np.inf
     best_performances = []
+    performances = []
     for i in range(n_episodes):
         policy = {}
         for s in STATE_SPACE:
@@ -92,15 +96,15 @@ def policy_gen_eval(n_episodes: int, gamma: float):
             best_policy = policy
 
         best_performances.append(best_policy_performance)
-    return [best_policy, best_performances]
+    return [best_policy, best_performances, performances]
 
 
 if __name__ == "__main__":
     # n_episodes = 150000
-    # PROBLEM 2b)
-    # avg_returns = approximate_objective_returns(n_episodes = 150000, policy=pi, gamma=.9)
-    # print(f'Final averaged objective function: {avg_returns[len(avg_returns)-1]}')
-    # print(f'Variance of averaged objective function: {np.var(avg_returns)}')
+    # # PROBLEM 2b)
+    # returns = approximate_objective_returns(n_episodes = 150000, policy=pi, gamma=.9)
+    # print(f'Final averaged objective function: {returns[0][len(returns[0])-1]}')
+    # print(f'Variance of objective function: {np.var(returns[1])}')
 
 
     # PROBLEM 2c)
